@@ -1,33 +1,7 @@
-/* 
+/* [Homework] Turtle Graphics - 2 */
 
-Steps to take 
-
-1. Get the input from the terminal 
-2. Create the class and methods for the turtle
-3. Output content to the console
-
-// Methods to create
-
-Forward, moves the turtle forward in a the direction its set to
-Right, updates the rotation of the turtle but does not move it any spaces 
-
-Left, same as above 
-
-All Points, returns an array containg all the cooordinates the turtle has walked over 
-
-Print, draws the turtles path along their travels to the console 
-
-// Stretch
-Get the output on a canvas with animations 
-
-*/
-
-// Require the file system module
-const fs = require('fs');
-
-// Create the turtle class
+// Create a turtle class
 class Turtle {
-  // Initialize the constructor to the default values if provided
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -37,7 +11,7 @@ class Turtle {
     this.paths = [];
   }
 
-  // Set up the forward method to move the turtle forward in the direction it is facing at the moment
+  // Set a forward method on the turtle instance
   forward(num) {
     if (this.direction === 'east') {
       this.x += num;
@@ -53,7 +27,7 @@ class Turtle {
     return this;
   }
 
-  // Set up the right method to have the turtle move right
+  // Set a right method on the turtle instance
   right() {
     const dir = ['north', 'east', 'south', 'west'];
     let idx = dir.indexOf(this.direction);
@@ -65,7 +39,7 @@ class Turtle {
     return this;
   }
 
-  // Set up the left method to have the turtle move left
+  // Set a left method on the turtle instance
   left() {
     const dir = ['north', 'east', 'south', 'west'];
     let idx = dir.indexOf(this.direction);
@@ -77,42 +51,32 @@ class Turtle {
     return this;
   }
 
-  // Added an all points method which returns an array containing all the coordinates the turtle has walked over
   allPoints() {
-    // console.log(this.points);
-    const combinedPoints = [];
-
-    // Iterate over all of the specified points
+    // Merge both the designated points and the path points arrays by first creating an empty array then pushing into them
+    const finalTemp = [];
     this.points.forEach((el) => {
-      combinedPoints.push(el);
+      finalTemp.push(el);
     });
-
-    // Iterate over all of the path points
     this.pathPoints().forEach((el) => {
-      combinedPoints.push(el);
+      finalTemp.push(el);
     });
 
-    // Add all of the points to a single array, then remove the duplicates
-    let arrayOfStrings = combinedPoints.map(JSON.stringify);
-    let uniqueStringArray = new Set(arrayOfStrings);
+    // Then create a seperate array, create a set and set them as strings.  Then remove them through the Javascript Set method and return the array with only unique values
+    let stringArray = finalTemp.map(JSON.stringify);
+    let uniqueStringArray = new Set(stringArray);
     let uniqueArray = Array.from(uniqueStringArray, JSON.parse);
-
-    // Return the points in an array
     return uniqueArray;
   }
 
-  // Set up the print method
   print() {
-    // Set the grid size to 20 to see the larger examples, this can be manually changed
-    // Set up a check and an output variable
-    let gridSize = 20;
+    // Set a default grid size, output variable to an empty string and a check to false
+    let gridSize = 10;
     let output = ``;
     let check = false;
 
-    // Iterate over the grid size to create either blank or full points
     for (let i = 0; i <= gridSize; i++) {
       for (let j = 0; j <= gridSize; j++) {
-        // Set up an empty array and add both path points and designated points to the array
+        // Merge both the designated points and the path points arrays by first creating an empty array then pushing into them
         const finalTemp = [];
 
         this.points.forEach((el) => {
@@ -123,22 +87,20 @@ class Turtle {
           finalTemp.push(el);
         });
 
-        // Add all of the points to a single array, then remove the duplicates
+        // Then create a seperate array, create a set and set them as strings.  Then remove them through the Javascript Set method and return the array with only unique values
         let stringArray = finalTemp.map(JSON.stringify);
         let uniqueStringArray = new Set(stringArray);
         let uniqueArray = Array.from(uniqueStringArray, JSON.parse);
 
-        // Loop over all of the values in the unique co-ordinates array
         for (let k = 0; k < uniqueArray.length; k++) {
           let x = uniqueArray[k][0];
           let y = uniqueArray[k][1];
-          // If they match a co-ordiante, fill a checkbox and change the match to true
+          // If the coordinates match, put them as a checked box
           if (i === y && j === x) {
             output += `\u2612`;
             check = true;
           }
         }
-        // Loop over the paths co-ordinates array
         for (let l = 0; l < this.paths.length; l++) {
           let x = this.paths[l][0];
           let y = this.paths[l][1];
@@ -147,9 +109,9 @@ class Turtle {
             check = true;
           }
         }
-        // If the check is false, then put in an empty box
+        // If they don't match, put them as an empty checkbox
         if (!check) {
-          output += '\u2610'; 
+          output += '\u2610';
         }
 
         // If the grid size is divisible by the current for loop iteration, create a new line
@@ -160,8 +122,6 @@ class Turtle {
         check = false;
       }
     }
-
-    // Return the results and log the output
     console.log(output);
     return output;
   }
@@ -227,74 +187,28 @@ class Turtle {
         }
       }
     }
-    // Return all path points 
+    // Return all path points
     return allPathPoints;
   }
 }
 
-/* Here is where the actual magic happens */
+/* Here are some test functions you can use! */
 
-// Get input from the terminal.  There are set as lets because they could be overrideen later in the function call depending on how many there are 
-let scriptArgsOne = process.argv[2];
-let scriptArgsTwo = process.argv[3];
+/* const turtle = new Turtle(0, 4);
+turtle
+  .forward(3)
+  .left()
+  .forward(3)
+  .right()
+  .forward(5)
+  .right()
+  .forward(8)
+  .right()
+  .forward(5)
+  .right()
+  .forward(3)
+  .left()
+  .forward(3)
+  .print();
 
-// Create a new empty turtle and set a variable to a blank fileName
-let turtle = new Turtle();
-let fileName = '';
-
-// Create the process file function 
-const saveToFile = (arr) => {
-  // Split the array by fashes 
-  const arrArgs = arr.split('-');
-  for (let i = 0; i < arrArgs.length; i++) {
-    let currArg = arrArgs[i];
-    // If the current iteration is 0, check to see if the turtle has starting co-ordinates 
-    if (i === 0) {
-      if (arrArgs[i].includes('t')) {
-        // Set the turtle co-ordinates 
-        turtle = new Turtle(
-          (this.x = parseInt(currArg.slice(1, currArg.indexOf(',')))),
-          (this.y = parseInt(
-            currArg.slice(currArg.indexOf(',') + 1, currArg.length)
-          ))
-        );
-      } else {
-        turtle = new Turtle(0, 0);
-      }
-    }
-
-    // Split the argv value by its functions; either going forward, left or right 
-    if (currArg.includes('f')) {
-      turtle.forward(parseInt(currArg.slice(1)));
-    } else if (currArg.includes('l')) {
-      turtle.left();
-    } else if (currArg.includes('r')) {
-      turtle.right();
-    }
-  }
-
-  // If there is a second arguemnt in the terminal, we need to create the file 
-  if (scriptArgsTwo) {
-    fs.writeFile(`${__dirname}/${fileName}`, turtle.print(), function (err) {
-      if (err) {
-        return console.log(err);
-      }
-      console.log(`🐢 Drawing written to ${fileName}`);
-    });
-    // If no second argument, then simply print 
-  } else {
-    turtle.print();
-  }
-};
-
-// Calling the function, if the first arguemtn includes --output, print and save the file, otherwise just print it 
-if (scriptArgsOne.includes('--output')) {
-  fileName = scriptArgsOne.slice(
-    scriptArgsOne.indexOf('=') + 1,
-    scriptArgsOne.length
-  );
-  console.log(fileName);
-  return saveToFile(scriptArgsTwo);
-} else {
-  saveToFile(scriptArgsOne);
-}
+  console.log(turtle.allPoints()); */
