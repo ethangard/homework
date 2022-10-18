@@ -1,0 +1,28 @@
+<div class="formInput form-group">
+  <label for="logoUrl">Logo Url</label>
+  <input
+    type="text"
+    name="logoUrl"
+    placeholder="e.g. https://www.example.com/some.png"
+    value="<%= data ? data.logoUrl : '' %>"
+  />
+
+  <label for="name">Name</label>
+  <input
+    type="text"
+    name="name"
+    placeholder="Flying Funks"
+    value="<%= data ? data.name : '' %>"
+  />
+
+  <label for="members">Members</label>
+  <textarea
+    name="members"
+    id="members"
+    cols="30"
+    rows="4"
+    placeholder="Jon Snow, Daenerys, Melisandre, Arya Stark"
+  >
+<%= data ? data.members : '' %></textarea
+  >
+</div>

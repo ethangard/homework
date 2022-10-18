@@ -1,0 +1,25 @@
+<%- include("../partials/header.ejs") %> 
+
+<div>
+  <% for( let val of data ) { %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="card-title-container">
+        <img src="<%= val.logoUrl %>" alt="" srcset="" class="logoUrl-img">
+        <h5 class="card-title"><%- val.name %></h5>
+        </div>
+      </a>
+      <p class="card-text">       
+       <%= val.members %>
+      </p>
+      <form action="/cohorts/<%- val.id %>/">
+       <input type="submit" value="Show Cohort" class="btn btn-inverse btn-primary">
+      </form>
+    </div>
+  </div>
+  <% } %>
+</div>
+
+<%- include("../partials/footer.ejs") %> 
+
+
