@@ -1,0 +1,169 @@
+<%- include('../partials/header.ejs') %>
+<script>
+  var pageData = '<%= data.members %>';
+</script>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h5><%- data.name %></h5>
+    <p><%- data.members %></p>
+    <form action="/cohorts/<%= data.id %>" method="POST">
+      <a href="/cohorts/<%= data.id %>/edit" class="btn btn-primary"
+        >Edit Cohort</a
+      >
+      <input type="hidden" name="_method" value="DELETE" />
+      <input type="submit" class="btn btn-danger" value="Delete Cohort" />
+    </form>
+
+    <hr />
+    <p>Method</p>
+
+    <div class="form-group">
+      <fieldset>
+        <div class="radios">
+          <input type="radio" name="radio-answer" id="team_count" />
+          <label for="Team Count" class="radio-label">Team Count</label>
+        </div>
+        <div class="radios">
+          <input type="radio" name="radio-answer" id="num_per_team" />
+          <label for="Number Per Team" class="radio-label"
+            >Number Per Team</label
+          >
+        </div>
+      </fieldset>
+      <label for="quantity">Quantity</label>
+      <input type="text" name="quantity" id="quantity" />
+      <form action="method">
+        <input
+          type="submit"
+          value="Assign Teams"
+          class="btn btn-outline-primary assign-btn"
+          id="submit"
+        />
+        <div id="output"></div>
+        <script>
+          document.getElementById('submit').addEventListener('click', (e) => {
+           
+            /* Prevent Defaults */
+            e.preventDefault();
+            /* Get Inputs */
+
+            let selectedRadio;
+            const selectedQuantity = document.getElementById('quantity').value;
+
+            if (document.getElementById('team_count').checked) {
+              //console.log('team count checked');
+              selectedRadio = 'team count';
+            } else if (document.getElementById('num_per_team').checked) {
+              console.log('num per team checked');
+              selectedRadio = 'num per team';
+            }
+
+            if (selectedRadio === 'team count') {
+              let output = '';
+              const divideTeams = (pageData) => {
+                /* Split up the Data */
+                const arrSplit = pageData.split(',');
+
+                function shuffleArray(arr) {
+                  for (var i = arr.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                  }
+
+                  const divisor = Math.ceil(arr.length / selectedQuantity);
+                  /*  console.log(arr);
+                  console.log(divisor); */
+                  let count = 0;
+                  let start = 1;
+                  while (count < arr.length) {
+                    if (count % divisor === 0 || count === 0) {
+                      output += `<tr><td>${start}</td><td>`;
+                      start++;
+                    }
+                    output += `${arr[count]}, `;
+                    if (count - 1 === arr.length) {
+                      output += `${arr[count]} </td></tr>`;
+                    }
+                    count++;
+                  }
+                  console.log(arr);
+                  console.log(output);
+                }
+                shuffleArray(arrSplit);
+              };
+              divideTeams(pageData);
+              const tableTemplate = `<table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Members</th>                                    
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      ${output}
+                                    </tbody>
+                                  </table>`;
+
+              document.getElementById('output').innerHTML = tableTemplate;
+            } else if (selectedRadio === 'num per team') {
+              console.log(selectedQuantity);
+
+              let output = '';
+              const divideTeams = (pageData) => {
+                /* Split up the Data */
+                const arrSplit = pageData.split(',');
+
+                /* Randomly Shuffle the array */
+                function shuffleArray(arr) {
+                  for (var i = arr.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                  }
+
+                  let count = 1;
+                  arr.forEach(function (item, index) {
+                    if (index % selectedQuantity === 0 || index === 0) {
+                      output += `<tr><td>${count}</td><td>`;
+                      count++;
+                    }
+                    output += `${item}, `;
+
+                    if (
+                      (index + 1) % selectedQuantity === 0 ||
+                      index === arr.length - 1
+                    ) {
+                      output += `</td></tr>`;
+                    }
+                  });
+                }
+                return shuffleArray(arrSplit);
+              };
+
+              divideTeams(pageData);
+              const tableTemplate = `<table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Members</th>                                    
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      ${output}
+                                    </tbody>
+                                  </table>`;
+
+              document.getElementById('output').innerHTML = tableTemplate;
+            }
+          });
+        </script>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer.ejs') %>
