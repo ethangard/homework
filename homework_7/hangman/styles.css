@@ -1,0 +1,128 @@
+html, body {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  font-size: 18px;
+}
+
+img {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.hangman-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  background-image: url('./images/western_portrait.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.letter-block {
+  padding: 0.5em;
+  border: 1px solid black;
+  margin: 0.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1.3em;
+  min-width: 50px;
+  min-height: 50px;
+}
+
+#keyboard {
+  width: 100%;
+  max-width: 675px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 1em;
+  background-color: hsla(0, 0%, 100%, 85%);
+  border-radius: 5px;
+  border: 2px solid #000;
+  margin: 1em;
+}
+#word {
+  background-color: hsla(0, 0%, 100%, 85%);
+  border-radius: 5px;
+  border: 2px solid #000;
+}
+
+.active {
+  background-color: #e56d57;
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+.word-letter-block {
+  text-align: center;
+  padding: 0.5em;
+  margin: 0.5em;
+  position: relative;
+  visibility: hidden;
+}
+
+.word-letter-block::after {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 2px;
+  content: '';
+  bottom: 0;
+  left: 0;
+  border-bottom: 2px solid black;
+  visibility: visible;
+}
+
+#word {
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  margin: 1em;
+  font-size: 1.2em;
+}
+
+.show {
+  visibility: visible;
+}
+
+nav {
+  min-height: 3em;
+  height: auto;
+  background-color: #e56d57;
+  margin-bottom: 0.5em;
+}
+
+.hangman-nav {
+  color: #fff;
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+}
+
+.guessCount {
+  padding: 1em;
+  background-color: hsla(0, 0%, 100%, 85%);
+  border-radius: 5px;
+  border: 2px solid #000;
+  margin-bottom: 1em;
+}
